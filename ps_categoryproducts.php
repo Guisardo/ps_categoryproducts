@@ -312,7 +312,8 @@ class Ps_Categoryproducts extends Module implements WidgetInterface
 
         foreach ($products as $rawProduct) {
             // Not duplicate current product
-            if ($rawProduct['id_product'] !== $idProduct && count($productsForTemplate) < (int) Configuration::get('CATEGORYPRODUCTS_DISPLAY_PRODUCTS')) {
+            if ($rawProduct['id_product'] !== $idProduct && count($productsForTemplate) < (int) Configuration::get('CATEGORYPRODUCTS_DISPLAY_PRODUCTS') &&
+                $rawProduct['quantity'] > 0) {
                 $productsForTemplate[] = $presenter->present(
                     $presentationSettings,
                     $assembler->assembleProduct($rawProduct),
@@ -337,7 +338,7 @@ class Ps_Categoryproducts extends Module implements WidgetInterface
         }
 
         $id_product = $product['id_product'];
-        $id_category = (isset($configuration['category']->id) ? (int) $configuration['category']->id : (int) $product['id_category_default']);
+        $id_category = ((isset($configuration['category']->id) && $configuration['category']->id > 2) ? (int) $configuration['category']->id : (int) $product['id_category_default']);
 
         if (!empty($id_product) && !empty($id_category)) {
 
